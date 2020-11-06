@@ -139,7 +139,15 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="card.cpp" />
+    <ClCompile Include="cashierStack.cpp" />
     <ClCompile Include="Main.cpp" />
+    <ClCompile Include="stackItem.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="card.h" />
+    <ClInclude Include="cashierStack.h" />
+    <ClInclude Include="stackItem.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
