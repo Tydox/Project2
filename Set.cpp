@@ -44,7 +44,7 @@ void Set::addCard(Card* c)
 		newCards[i] = cards[i];
 	}
 
-	newCards[howManyCards]= c; //IMPORT POINTER TO LAST ARRAY POSITION - CHECK WARNINGS
+	newCards[howManyCards-1]= c; //IMPORT POINTER TO LAST ARRAY POSITION - CHECK WARNINGS
 	delete[] cards;//EMPTY ORIGINAL ARRAY
 
 	cards=newCards;//SAVE THE NEW ARRAY IN THE ORIGINAL VALUE

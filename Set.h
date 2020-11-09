@@ -1,6 +1,6 @@
 #ifndef _SET
 #define _SET
-#include "Card.h"
+#include "card.h"
 #include <iostream>
 
 class Set
