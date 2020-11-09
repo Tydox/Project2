@@ -73,7 +73,7 @@ void CashierStack::printStackForDeBugOnly() const
 	stackItem* tmp = head;
 	cout << "---------------";
 	for(int i =0; tmp;i++,tmp=tmp->getNextItem()) {
-		cout << "\n no " << i<<" - ";
+		cout << "\nNum [" << i<<"] \t";
 		tmp->getCard()->printCard();
 	
 	}

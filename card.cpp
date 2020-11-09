@@ -6,12 +6,12 @@ using namespace std;
 #include <fcntl.h>
 
 
-void Card::setCard(char c, int v)  {
+void Card::setCard(char c, int v) {
 	sign = c;
 	value = v;
 }
 
-void Card::printCard() const{
+void Card::printCard() const {
 
 	_setmode(_fileno(stdout), _O_U16TEXT);
 	switch (sign) {
@@ -29,7 +29,7 @@ void Card::printCard() const{
 		break;
 	}
 	_setmode(_fileno(stdout), _O_TEXT);
-	switch (value) { 
+	switch (value) {
 	case 11:
 		cout << " J";
 		break;
@@ -43,10 +43,10 @@ void Card::printCard() const{
 		cout << " A";
 		break;
 	default: cout << " " << (int)value;
-	
+
 	}
-		
-		
+
+
 }
 
 char Card::getSign() const

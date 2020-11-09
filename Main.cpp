@@ -1,6 +1,14 @@
 #include <iostream>
+#include "GameEngine.h"
 
-void main()
+int main()
 {
+
+	GameEngine test;
+
+	test.printGame();
 	
+
+
+	return 0;
 }

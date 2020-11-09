@@ -12,7 +12,7 @@ Set::Set(Set& s)
 	howManyCards = s.howManyCards; //copy nums of cards
 
 	cards = new Card*[howManyCards]; //create a new card set
-
+	
 	for(int i=0; i<howManyCards;++i) //copy cards pointers from s to our array
 	{
 		cards[i] = s.cards[i];
@@ -34,14 +34,15 @@ void Set::addCard(Card* c)
 		std::cout << "GIVEN CARD IS NULL\n";
 		return;
 	}
-
+	
 	++howManyCards; //INCREASE CARD SIZE BY 1
 
-	Card** newCards = new Card*[howManyCards]; //NEW ARRAY TO COPY
+	Card** newCards = new Card*[howManyCards]; //NEW ARRAY TO COPY	
 
 	for(int i=0; i<howManyCards-1;++i) //copy cards pointers from s to our array
 	{
 		newCards[i] = cards[i];
+		//std::cout << (i+1) <<"\t" << newCards[i]->getSign() << "val: " <<newCards[i]->getValue() << "\n";
 	}
 
 	newCards[howManyCards-1]= c; //IMPORT POINTER TO LAST ARRAY POSITION - CHECK WARNINGS
@@ -66,27 +67,29 @@ Card* Set::extractCard(int int_val, char char_c)
 		}
 	}
 
+	if (cardIndex == -1)
+		return nullptr; //RETURN FALSE END CONDITION
+
+	
 	Card* removedCard = cards[cardIndex]; //KEEP THE POINTER OF THE REMOVED CARD
 
 	--howManyCards;//REDUCE SIZE BY -1
 	Card** newCards = new Card*[howManyCards]; //CREATE A NEW ARRAY IN NEW SIZE
 
+	int w = 0;
 	for(int i=0; i<howManyCards; ++i) //COPY CARD POINTERS
 	{
 		if(i!=cardIndex)
 		{
-			newCards[i]=cards[i];
+			newCards[w++]=cards[i];
 		}
 	}
 
-	delete [] cards;
+	delete [] cards; //DELETE OLD
 
-	cards=newCards;
+	cards=newCards; //REPLACE OLD DELETED ARRAY WITH NEW ARRAY
 	
-	if(cardIndex==-1)
-		return nullptr; //RETURN FALSE END CONDITION
-	else
-		return removedCard; //RETURN TRUE CARD THAT WAS FOUND
+	return removedCard; //RETURN TRUE CARD THAT WAS FOUND
 }
 
 bool Set::isValidSet()
@@ -102,13 +105,13 @@ bool Set::isEmpty()
 	if(cards==nullptr)
 	{
 		std::cout << "Cards Array not initialized\n"; //4DEBUG
-		return false;
+		return true;
 	}
 
 	if(howManyCards>0) //if we have any cards return yay
-		return true;
-	else
 		return false;
+	else
+		return true;
 }
 
 bool Set::isSameValueSeries()
@@ -190,16 +193,29 @@ bool Set::isSequential() //CAN WE CHANGE THE ORDER OF THE DECK
 void Set::printSet()
 {
 
-	if(isEmpty()) //END CONDITION
+	if (isEmpty()) //END CONDITION
+	{
 		std::cout << "Empty Serial\n";
+		return;
+	}
 
-
+	if (howManyCards == 14 || howManyCards == 28)
+	{
+		std::cout << "\n------------------\n";
+	}
+	
 	for(int i=0; i<howManyCards;++i)
 	{
 		cards[i]->printCard();
 
-		if(i!=howManyCards-1) // MAKES SURE WE DONT HAVE , ON THE LAST PRINT
-		std::cout <<","; //CHECK IF , IS NEEDED BECAUSE UNSURE OF PRINTCARD METHOD
+		
+
+		
+		if(howManyCards>=1)
+			std::cout << "\n";
+		
+		//if(i!=howManyCards-1) // MAKES SURE WE DONT HAVE , ON THE LAST PRINT
+		//std::cout <<",\n"; //CHECK IF , IS NEEDED BECAUSE UNSURE OF PRINTCARD METHOD
 	}
 	
 }
