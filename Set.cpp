@@ -11,6 +11,12 @@ Set::Set(Set& s)
 {
 	howManyCards = s.howManyCards; //copy nums of cards
 
+	if (s.howManyCards == 0)//END CONDITION -- CHECK
+	{
+		cards = nullptr;
+		return;
+	}
+	
 	cards = new Card*[howManyCards]; //create a new card set
 	
 	for(int i=0; i<howManyCards;++i) //copy cards pointers from s to our array
@@ -92,7 +98,7 @@ Card* Set::extractCard(int int_val, char char_c)
 	return removedCard; //RETURN TRUE CARD THAT WAS FOUND
 }
 
-bool Set::isValidSet()
+bool Set::isValidSet() const
 {
 	if(isSameValueSeries()||isSequential())
 		return true;
@@ -100,7 +106,7 @@ bool Set::isValidSet()
 		return false;
 }
 
-bool Set::isEmpty()
+bool Set::isEmpty() const
 {
 	if(cards==nullptr)
 	{
@@ -114,7 +120,7 @@ bool Set::isEmpty()
 		return true;
 }
 
-bool Set::isSameValueSeries()
+bool Set::isSameValueSeries() const
 {
 	if (howManyCards > 4 || howManyCards < 3) //END CONDITION
 		return false;
@@ -156,7 +162,7 @@ bool Set::isSameValueSeries()
 		return true;
 }
 
-bool Set::isSequential() //CAN WE CHANGE THE ORDER OF THE DECK
+bool Set::isSequential() const //CAN WE CHANGE THE ORDER OF THE DECK
 {	
 	if(howManyCards<3) //END CONDITION
 		return false;
@@ -190,7 +196,7 @@ bool Set::isSequential() //CAN WE CHANGE THE ORDER OF THE DECK
 	
 }
 
-void Set::printSet()
+void Set::printSet() const
 {
 
 	if (isEmpty()) //END CONDITION
@@ -199,10 +205,10 @@ void Set::printSet()
 		return;
 	}
 
-	if (howManyCards == 14 || howManyCards == 28)
+	/*if (howManyCards == 14 || howManyCards == 28)
 	{
 		std::cout << "\n------------------\n";
-	}
+	}*/
 	
 	for(int i=0; i<howManyCards;++i)
 	{
@@ -211,11 +217,11 @@ void Set::printSet()
 		
 
 		
-		if(howManyCards>=1)
+		/*if(howManyCards>=1)
 			std::cout << "\n";
-		
-		//if(i!=howManyCards-1) // MAKES SURE WE DONT HAVE , ON THE LAST PRINT
-		//std::cout <<",\n"; //CHECK IF , IS NEEDED BECAUSE UNSURE OF PRINTCARD METHOD
+		*/
+		if(i!=howManyCards-1) // MAKES SURE WE DONT HAVE , ON THE LAST PRINT
+		std::cout <<", "; //CHECK IF , IS NEEDED BECAUSE UNSURE OF PRINTCARD METHOD
 	}
 	
 }

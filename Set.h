@@ -16,11 +16,11 @@ class Set
 	
 	void addCard(Card* c); //add a new card to set
 	Card* extractCard(int int_val, char char_c);
-	bool isValidSet();
-	bool isEmpty();
-	bool isSameValueSeries();
-	bool isSequential();
-	void printSet();
+	bool isValidSet() const;
+	bool isEmpty() const;
+	bool isSameValueSeries() const;
+	bool isSequential() const;
+	void printSet() const;
 	
 };
 

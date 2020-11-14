@@ -3,13 +3,13 @@
 Player::Player() //INIT WHEN NO NAME IS GIVEN
 {
 		name = nullptr;
-		numInHand = NULL;
+		numInHand = 0;
 		hand = nullptr;
 }
 
-Player::Player(char* Name)//INIT WITH GIVEN NAME
+Player::Player(char* name)//INIT WITH GIVEN NAME
 {
-	setName(Name);
+	setName(name);
 	numInHand = 0;
 	hand = nullptr;
 }
@@ -20,16 +20,17 @@ Player::~Player()
 	delete[] hand;
 }
 
-void Player::setName(char* Name) //XX
+void Player::setName(char* name) //XXXXXXXX
 {
-	if (name == NULL)
+	if (name == nullptr)
 	{
 		std::cout << "ERROR NO NAME IS GIVEN\nNOTHING TO DO\n";
 		return;
 	}
 	
-	name = new char[strlen(Name) + 1]; //ALLOCATED MEM
-	strcpy_s(name, strlen(Name)+1, Name); //COPY NAME //CHECK IF WORKING!!!!!!!
+	this->name = new char[strlen(name) + 1]; //ALLOCATED MEM
+	strcpy_s(this->name, strlen(name)+1, name); //COPY NAME //CHECK IF WORKING!!!!!!!
+	
 }
 
 void Player::setCard(Card* card) //XX
@@ -57,26 +58,22 @@ void Player::setCard(Card* card) //XX
 
 Card* Player::extractCard(char char_c, int int_val)
 {
+	if ((char_c != 'C' && char_c != 'H' && char_c != 'D' && char_c != 'S')|| !(int_val>0 && int_val <14))//END CONDITION
+	{
+		std::cout << "ERROR INVALID CARD INPUT\nNothing TO DO\n";
+		return nullptr;
+	}
+	
 	//CONTINUE ONLY IF NUM && SYMBOL ARE CORRECT
-	if (char_c == '\0' || (char_c != 'C' && char_c != 'H' && char_c != 'D' && char_c != 'S'))//END CONDITION
-	{
-		std::cout << "ERROR NO CHAR WAS ENTERED\nNothing TO DO\n";
-		return nullptr;
-	}
-	if (int_val == 0 || !(int_val>0 && int_val <14))//END CONDITION
-	{
-		std::cout << "ERROR NO CARD NUMBER WAS ENTERED\nNothing TO DO\n";
-		return nullptr;
-	}
 
+	if (char_c == '\0' && int_val == 0)//EMPTY CONDITION
+	{	
+		return removeCard('R', 0); //R - REMOVE, 0 - FIRST CARD 
+	}
 	
 	return removeCard(char_c,int_val);//VALUES ARE VALID THUS CONTINUING TO REMOVE
 }
 
-Card* Player::extractCard()
-{
-	return removeCard('R', 0); //R - REMOVE, 0 - FIRST CARD 
-}
 
 Card* Player::removeCard(char char_c, int int_val)
 {
@@ -97,7 +94,7 @@ Card* Player::removeCard(char char_c, int int_val)
 		}
 	}
 	
-	if (cardIndex == -1)
+	if (cardIndex == -1)//THE CARD WAS NOT FOUND
 	{
 		std::cout << "NO CARD WAS FOUND\n";
 		return nullptr; //RETURN FALSE END CONDITION
@@ -125,17 +122,17 @@ Card* Player::removeCard(char char_c, int int_val)
 	
 }
 
-char* Player::getName()
+char* Player::getName() const
 {
 	return name;
 }
 
-int Player::getNumberOfCards()
+int Player::getNumberOfCards() const
 {
 	return numInHand;
 }
 
-void Player::printHand()
+void Player::printHand() const
 {
 	if (isEmpty()) //END CONDITION
 	{
@@ -153,7 +150,7 @@ void Player::printHand()
 }
 
 
-bool Player::isEmpty()
+bool Player::isEmpty() const
 {
 	if (hand == nullptr)
 	{
