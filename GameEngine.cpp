@@ -530,7 +530,7 @@ void GameEngine::printSet(Player* player)
 	std::cout << "\nSET:\n";
 	for (int i = 0; i < howManySets; ++i)
 	{
-		std::cout << "Set[" << i << "]: ";
+		std::cout << "\nSet[" << i << "]: ";
 		boardSets[i]->printSet();
 	}
 	std::cout << "\n---------------------\nOption:";
