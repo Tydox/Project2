@@ -31,7 +31,7 @@ void Player::setName(char* name) //XXXXXXXX
 	delete[] this->name;//END CONDITION - VERIFY THAT NO MEM LEAK WILL HAPPEN
 	
 	this->name = new char[strlen(name) + 1]; //ALLOCATED MEM
-	strcpy_s(this->name, strlen(name), name); //COPY NAME //CHECK IF WORKING!!!!!!!
+	strcpy_s(this->name, strlen(name)+1, name); //COPY NAME //CHECK IF WORKING!!!!!!!
 	
 }
 
@@ -60,20 +60,20 @@ void Player::setCard(Card* card) //XX
 
 Card* Player::extractCard(char char_c, int int_val)
 {
-	if ((char_c != 'C' && char_c != 'H' && char_c != 'D' && char_c != 'S')|| !(int_val>0 && int_val <14))//END CONDITION
+	if ((char_c == 'C' || char_c == 'H' || char_c == 'D' || char_c == 'S') && (int_val>0 && int_val <14))//IF VALID
 	{
-		std::cout << "ERROR INVALID CARD INPUT\nNothing TO DO\n";
-		return nullptr;
+		return removeCard(char_c, int_val);//VALUES ARE VALID THUS CONTINUING TO REMOVE
 	}
 	
-	//CONTINUE ONLY IF NUM && SYMBOL ARE CORRECT
+	
 
 	if (char_c == '\0' && int_val == 0)//EMPTY CONDITION
 	{	
 		return removeCard('R', 0); //R - REMOVE, 0 - FIRST CARD 
 	}
 	
-	return removeCard(char_c,int_val);//VALUES ARE VALID THUS CONTINUING TO REMOVE
+	std::cout << "ERROR INVALID CARD INPUT\nNothing TO DO\n";
+		return nullptr;
 }
 
 
@@ -84,7 +84,7 @@ Card* Player::removeCard(char char_c, int int_val)
 
 	if (char_c == 'R' && int_val == 0) //FIRST CARD REMOVAL - SPECIAL CASE
 	{
-		if (getNumberOfCards() == 1)
+		if (getNumberOfCards() > 0)
 		{
 			cardIndex = 0;
 		}
@@ -113,7 +113,7 @@ Card* Player::removeCard(char char_c, int int_val)
 	Card** newhand = new Card * [numInHand]; //CREATE A NEW ARRAY IN NEW SIZE
 
 	int w = 0;
-	for (int i = 0; i < numInHand; ++i) //COPY CARD POINTERS
+	for (int i = 0; i < numInHand+1; ++i) //COPY CARD POINTERS
 	{
 		if (i != cardIndex)
 		{
@@ -141,7 +141,7 @@ int Player::getNumberOfCards() const
 
 void Player::printHand() const
 {
-	if (isEmpty()) //END CONDITION
+	if (!isEmpty()) //END CONDITION
 	{
 		std::cout << "HAND IS EMPTY\n";
 		return;

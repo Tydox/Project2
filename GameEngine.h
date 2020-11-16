@@ -1,9 +1,11 @@
 #ifndef _GAME_ENGINE
 #define _GAME_ENGINE
+
 #include "card.h"
-#include "CashierStack.h"
+#include "cashierStack.h"
 #include "Player.h"
 #include "Set.h"
+
 
 //class Player;
 //class Set;
@@ -26,7 +28,9 @@ private:
 public:
 
 	GameEngine();
-
+	~GameEngine();
+	
+	
 	void initPlayer();
 	void initSet();
 	void initCards();
@@ -39,13 +43,18 @@ public:
 	
 	void cardToSet(bool endTurn=false, Card** cardBackup=nullptr,int backupCounter=-1,Player* player=nullptr); //IF PLAYER == NULL, SET TO SET, if PLAYER!=NULL PLAYER HAND TO SET
 	bool isSetNotValid(int i) const;
-	void endTurn(Set** backupSet,Card** cardBackup , int cardCounter,Player* player=nullptr);
+	void endTurn(Set** backupSet,Card** cardBackup , int cardCounter,int oldsetnum,Player* player=nullptr);
+
 	bool turn(Player* player);
 	void userForfeit(Player* player);
 	bool isWinner(Player* player) const;
 
 	int findPlayer(Player* player) const;
 	void startGame();
+
+	void printSet(Player* player);
+
+	//void test(GameEngine g);
 };
 
 

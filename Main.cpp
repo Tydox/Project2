@@ -1,14 +1,12 @@
 #include <iostream>
 #include "GameEngine.h"
 
+//#define DEBUG
+
+
 int main()
 {
-
-	GameEngine test;
-
-	test.printGame();
-	
-
-
+	GameEngine game;
+	game.startGame();
 	return 0;
 }

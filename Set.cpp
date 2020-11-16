@@ -110,7 +110,7 @@ bool Set::isEmpty() const
 {
 	if(cards==nullptr)
 	{
-		std::cout << "Cards Array not initialized\n"; //4DEBUG
+		//std::cout << "Empty Set\n"; //4DEBUG
 		return true;
 	}
 
@@ -133,7 +133,7 @@ bool Set::isSameValueSeries() const
 	int d = 0; //diamond
 
 
-	for (int i = 0; i < howManyCards; ++i) //CAN ONLY RUN WHEN THE NUMBER OF CARDS IS EITHER 3 OR 4
+	for (int i = 0; i < howManyCards-1; ++i) //CAN ONLY RUN WHEN THE NUMBER OF CARDS IS EITHER 3 OR 4
 	{
 		if (cards[i]->getValue() != cards[i + 1]->getValue())
 			return false;
@@ -175,7 +175,7 @@ bool Set::isSequential() const //CAN WE CHANGE THE ORDER OF THE DECK
 	{
 		for(int j=i+1;j<howManyCards;++j)
 		{
-			if(cards[i]->getValue() > cards[j]->getValue())
+			if((cards[i]->getValue() > cards[j]->getValue()) && cards[i]->getSign() > cards[j]->getSign())
 			{
 				tmp=cards[i];
 				cards[i]=cards[j];
@@ -201,7 +201,7 @@ void Set::printSet() const
 
 	if (isEmpty()) //END CONDITION
 	{
-		std::cout << "Empty Serial\n";
+		std::cout << "Empty Set\n";
 		return;
 	}
 
