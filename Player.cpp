@@ -28,8 +28,10 @@ void Player::setName(char* name) //XXXXXXXX
 		return;
 	}
 	
+	delete[] this->name;//END CONDITION - VERIFY THAT NO MEM LEAK WILL HAPPEN
+	
 	this->name = new char[strlen(name) + 1]; //ALLOCATED MEM
-	strcpy_s(this->name, strlen(name)+1, name); //COPY NAME //CHECK IF WORKING!!!!!!!
+	strcpy_s(this->name, strlen(name), name); //COPY NAME //CHECK IF WORKING!!!!!!!
 	
 }
 
@@ -81,7 +83,12 @@ Card* Player::removeCard(char char_c, int int_val)
 	int cardIndex = -1; //IF VAL is -1 NO CARD WAS FOUND - END CONDITION MET
 
 	if (char_c == 'R' && int_val == 0) //FIRST CARD REMOVAL - SPECIAL CASE
-		cardIndex = 0;
+	{
+		if (getNumberOfCards() == 1)
+		{
+			cardIndex = 0;
+		}
+	}
 	else
 	{
 		for (int j = 0; j < numInHand; ++j) //FIND MATCHING CARD IN THE hand ARRAY

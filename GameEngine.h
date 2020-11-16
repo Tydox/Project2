@@ -37,12 +37,15 @@ public:
 
 	void createSet();
 	
-	void cardToSet(Card** cardBackup,bool endTurn=false,int backupCounter=0,Player* player=nullptr); //IF PLAYER == NULL, SET TO SET, if PLAYER!=NULL PLAYER HAND TO SET
-	bool isSetValid(int i) const;
+	void cardToSet(bool endTurn=false, Card** cardBackup=nullptr,int backupCounter=-1,Player* player=nullptr); //IF PLAYER == NULL, SET TO SET, if PLAYER!=NULL PLAYER HAND TO SET
+	bool isSetNotValid(int i) const;
 	void endTurn(Set** backupSet,Card** cardBackup , int cardCounter,Player* player=nullptr);
 	bool turn(Player* player);
 	void userForfeit(Player* player);
-	bool isWinner(Player* player);
+	bool isWinner(Player* player) const;
+
+	int findPlayer(Player* player) const;
+	void startGame();
 };
 
 
