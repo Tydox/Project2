@@ -269,8 +269,8 @@ bool GameEngine::turn(Player* player)
 	int backupCardCounter=0;
 
 	Card* tempCardDeck = deck.pop();
-	trash.push(tempCardDeck);
-	tempCardDeck = deck.pop();
+	//trash.push(tempCardDeck);
+	//tempCardDeck = deck.pop();
 	char userOpt='9';
 	
 	while (userOpt != '0')
@@ -489,6 +489,9 @@ void GameEngine::startGame()
 		}
 	}
 
+	trash.push(deck.pop());
+	
+	
 	bool gameStatus = true;
 	int playersOld = howManyPlayers;
 	while(gameStatus)//RUN UNTIL GAME OVER
