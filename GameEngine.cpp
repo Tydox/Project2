@@ -180,7 +180,7 @@ void GameEngine::cardToSet(bool endTurn, Card** cardBackup, int backupCounter, P
 	{
 		boardSets[setIndexDst]->addCard(tmpCard); //EXTRACT CARD THEN ADD TO SET
 		if (backupCounter > -1 && cardBackup!=nullptr && player!=nullptr) {
-			cardBackup[backupCounter]->setCard(tmpCard->getSign(),tmpCard->getValue());
+			cardBackup[backupCounter] = tmpCard;
 		}
 	}
 	else
@@ -228,7 +228,7 @@ void GameEngine::endTurn(Set** backupSet,Card** cardBackup,int cardCounter, int 
 	case 0://VALID
 		{
 			cardToSet(true,nullptr,0,player);
-			delete[] backupSet;
+			//delete[] backupSet;
 			delete[] cardBackup;
 			break;
 		}
@@ -236,7 +236,7 @@ void GameEngine::endTurn(Set** backupSet,Card** cardBackup,int cardCounter, int 
 	case 1://NOT VALID
 		{
 
-			delete[] boardSets;//DELETE OLD SET
+			//delete[] boardSets;//DELETE OLD SET
 			boardSets=backupSet;//ROLLBACK
 			howManySets = oldsetnum;
 			std::cout << "BOARD SET ARE NOT VALID, INITIATING ROLLBACK!\n";
@@ -262,8 +262,8 @@ bool GameEngine::turn(Player* player)
 {
 	Set** backupSet(boardSets); //COPY BACKUP SETS
 	Card**  backupCard = new Card*[14]; //MAX CARDS TO PUT IN SETS
-	for(int y=0;y<14;++y)
-	backupCard[y] = new Card;
+	//for(int y=0;y<14;++y)
+	//backupCard[y] = new Card;
 	int oldSetNum = howManySets;
 	
 	int backupCardCounter=0;
@@ -348,7 +348,8 @@ bool GameEngine::turn(Player* player)
 		{
 		case '1'://Create new set
 		{
-			createSet(); 
+			createSet();
+			backupSet = boardSets;
 				break;
 		}
 		case '2'://move card from hand to set

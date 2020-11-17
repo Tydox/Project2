@@ -83,7 +83,7 @@ Card* Set::extractCard(int int_val, char char_c)
 	Card** newCards = new Card*[howManyCards]; //CREATE A NEW ARRAY IN NEW SIZE
 
 	int w = 0;
-	for(int i=0; i<howManyCards; ++i) //COPY CARD POINTERS
+	for(int i=0; i<howManyCards+1; ++i) //COPY CARD POINTERS
 	{
 		if(i!=cardIndex)
 		{
@@ -164,7 +164,7 @@ bool Set::isSameValueSeries() const
 
 bool Set::isSequential() const //CAN WE CHANGE THE ORDER OF THE DECK
 {	
-	if(howManyCards<3) //END CONDITION
+	if(howManyCards<3 || howManyCards > 4) //END CONDITION
 		return false;
 	
 	//Card** minSorted = new Card*[howManyCards];
@@ -175,7 +175,7 @@ bool Set::isSequential() const //CAN WE CHANGE THE ORDER OF THE DECK
 	{
 		for(int j=i+1;j<howManyCards;++j)
 		{
-			if((cards[i]->getValue() > cards[j]->getValue()) && cards[i]->getSign() > cards[j]->getSign())
+			if((cards[i]->getValue() > cards[j]->getValue()) && cards[i]->getSign() == cards[j]->getSign())
 			{
 				tmp=cards[i];
 				cards[i]=cards[j];
