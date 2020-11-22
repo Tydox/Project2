@@ -1,6 +1,4 @@
 #include "GameEngine.h"
-
-
 #include <iostream>
 #include <ostream>
 
@@ -13,65 +11,63 @@ GameEngine::GameEngine()
 
 GameEngine::~GameEngine()
 {
-	
+	for (int i = 0; i < howManyPlayers; i++)
+		delete players[i];
+
+	for (int i = 0; i < howManySets; i++)
+		delete boardSets[i];
+
+	for (int i = 0; i < backupSetNum; i++)
+		delete boardBackup[i];
+
+	delete[] boardBackup;
 	delete[] boardSets;
 	delete[] players;
-	//delete[] cards;
-	
-	
 }
 
 void GameEngine::initPlayer()
 {
 	players = nullptr;
 	howManyPlayers = 0;
-	
+
 }
 
 void GameEngine::initSet()
 {
 	boardSets = nullptr;
 	howManySets = 0;
-	
+
 }
 
 void GameEngine::initCards()
 {
-	//boardSets = new Set*[2]; //construct 2 decks
-	//howManySets = 2;
 
-	//boardSets[0] = new Set;
-	//boardSets[1] = new Set;
 	int counter = 0;
-	
-	for(int i=1;i<=2;++i)//RUNS ON DECK
+
+	for (int i = 1; i <= 2; ++i)//RUNS ON DECK
 	{
-		for(int j =1; j<=4;++j)//SYMBOLS
+		for (int j = 1; j <= 4; ++j)//SYMBOLS
 		{
 
-			for(int w=1; w<=13;++w)//NUMBERS
+			for (int w = 1; w <= 13; ++w)//NUMBERS
 			{
 				cards[counter].setCard(initSymbol(j), w);//CREATE ONE CARD
-				//boardSets[i-1]->addCard(cards+(counter)); //SAVES CARD IN DECK
 				deck.push(cards + (counter));//INSERT NEW CARD INTO DEALER DECK
 				++counter;
-			}	
+			}
 		}
-		
+
 	}
 
-	/*initPlayer();
-	initSet();*/
-	
 	deck.shuffle(); //SHUFFLE DEALER DECK
-	
+
 }
 
 char GameEngine::initSymbol(int num) const
 {
-	
+
 	switch (num) {
-	case 1 :
+	case 1:
 		return 'H';
 	case 2:
 		return 'S';
@@ -80,34 +76,25 @@ char GameEngine::initSymbol(int num) const
 	case 4:
 		return 'D';
 	default:
-		{
+	{
 		std::cout << "ERROR YOU BROKE THIS METHOD\n";
-			return NULL;
-		}
+		return NULL;
 	}
-	
+	}
+
 }
 
-void GameEngine::printGame() const
-{
-	//std::cout << " FIRST SET:\n";
-	//boardSets[0]->printSet();
-	//std::cout << "\n\n SECOND SET:\n";
-	//boardSets[1]->printSet();
 
-	//deck.printStackForDeBugOnly();
-	
-}
 
 void GameEngine::createSet()
 {
 
 	++howManySets; //ADD 1 TO SET COUNT
-	Set** newSet = new Set*[howManySets]; //CREATE A NEW SET
+	Set** newSet = new Set * [howManySets]; //CREATE A NEW SET
 
-	int i=0;
+	int i = 0;
 	if (howManySets - 1 > 0) {
-		for (; i < howManySets-1; ++i)
+		for (; i < howManySets - 1; ++i)
 		{
 			newSet[i] = boardSets[i]; //COPY POINTER
 		}
@@ -116,27 +103,20 @@ void GameEngine::createSet()
 
 	delete[] boardSets; //DELETE OLD SET
 
-	boardSets=newSet; //COPY NEW SET INTO BOARD SET
+	boardSets = newSet; //COPY NEW SET INTO BOARD SET
 
 
-	
+
 }
 
 void GameEngine::cardToSet(bool endTurn, Card** cardBackup, int backupCounter, Player* player)
 {
-	/*if(cardBackup==nullptr)
-	{
-		std::cout << "ERROR NO BACKUP CARD WAS CREATED!!!!!\n";
-		return;
-	}*/
-	
-	
 	//user data
-	int setIndexSrc=0;
-	int setIndexDst=0;
-	int cardNum=0;
-	char cardSym='\0';
-	Card* tmpCard=nullptr;
+	int setIndexSrc = 0;
+	int setIndexDst = 0;
+	int cardNum = 0;
+	char cardSym = '\0';
+	Card* tmpCard = nullptr;
 
 	do
 	{
@@ -154,65 +134,57 @@ void GameEngine::cardToSet(bool endTurn, Card** cardBackup, int backupCounter, P
 
 		std::cin >> cardNum;
 
-			std::cout << "Enter a Card Symbol[H-Heart,D-Diamond,C-Club,S-Spades]:\n";
-			std::cin >> cardSym; //TO VERIFY IF THE CHAR IS CORRECT WILL HAPPEN IN EXTRACTCARD
+		std::cout << "Enter a Card Symbol[H-Heart,D-Diamond,C-Club,S-Spades]:\n";
+		std::cin >> cardSym; //TO VERIFY IF THE CHAR IS CORRECT WILL HAPPEN IN EXTRACTCARD
 
-			if (player != nullptr)//EXTRACT ONLY IS PASSED A PLAYER
-			{
-				tmpCard = player->extractCard(cardSym, cardNum);
-				
-			}
-			else
-			{
-				std::cout << "Enter from which Set to remove a card:\n";
-				std::cin >> setIndexSrc;
+		if (player != nullptr)//EXTRACT ONLY IS PASSED A PLAYER
+		{
+			tmpCard = player->extractCard(cardSym, cardNum);
 
-				if (isSetNotValid(setIndexSrc))//IF SET INDEX IS TOO BIG RESTART
-					continue;
+		}
+		else
+		{
+			std::cout << "Enter from which Set to remove a card:\n";
+			std::cin >> setIndexSrc;
 
-				tmpCard = boardSets[setIndexSrc]->extractCard(cardNum, cardSym);
-			}
-		
-	}
-	while(tmpCard==nullptr);//ENDS LOOP WHEN A CARD IS EXTRACTED
+			if (isSetNotValid(setIndexSrc))//IF SET INDEX IS TOO BIG RESTART
+				continue;
+
+			tmpCard = boardSets[setIndexSrc]->extractCard(cardNum, cardSym);
+		}
+
+	} while (tmpCard == nullptr);//ENDS LOOP WHEN A CARD IS EXTRACTED
 
 	if (endTurn == false)
 	{
 		boardSets[setIndexDst]->addCard(tmpCard); //EXTRACT CARD THEN ADD TO SET
-		if (backupCounter > -1 && cardBackup!=nullptr && player!=nullptr) {
+		if (backupCounter > -1 && cardBackup != nullptr && player != nullptr) {
 			cardBackup[backupCounter] = tmpCard;
 		}
 	}
 	else
 	{
-		//Card* tmp = player->extractCard();
-		//if (tmp != nullptr) {
-			trash.push(tmpCard);
-		//}
+		trash.push(tmpCard);
 	}
 
-
-//	tmpCard=nullptr;//CHECK IF I NEED TO DELETE THE TMPCARD VARIABLE OR NOT
-	
-	
 }
 
 bool GameEngine::isSetNotValid(int i) const
 {
-	if(i-1>howManySets)
-		{
-			std::cout << "ERROR, SET DOES NOT EXIST!\nTRY AGAIN\n";
-			return true;
-		}
+	if (i - 1 > howManySets)
+	{
+		std::cout << "ERROR, SET DOES NOT EXIST!\nTRY AGAIN\n";
+		return true;
+	}
 	else
-	return false;
+		return false;
 }
 
-void GameEngine::endTurn(Set** backupSet,Card** cardBackup,int cardCounter, int oldsetnum,Player* player)
+void GameEngine::endTurn(Card** cardBackup, int cardCounter, int oldsetnum, Player* player)
 {
 
-	int isNotValid=0;
-	
+	int isNotValid = 0;
+
 	for (int i = 0; i < howManySets; ++i)
 	{
 		if (!(boardSets[i]->isValidSet()))
@@ -226,53 +198,79 @@ void GameEngine::endTurn(Set** backupSet,Card** cardBackup,int cardCounter, int 
 	switch (isNotValid)
 	{
 	case 0://VALID
-		{
-			cardToSet(true,nullptr,0,player);
-			//delete[] backupSet;
-			delete[] cardBackup;
+	{
+		if (!player->isEmpty())
 			break;
+
+		cardToSet(true, nullptr, 0, player);
+
+
+		delete[] cardBackup;
+		cardBackup = nullptr;
+
+		for (int i = 0; i < backupSetNum; i++)
+		{
+			delete boardBackup[i];
 		}
+
+		delete[] boardBackup;
+
+		boardBackup = new Set * [howManySets]; //COPY BACKUP SETS
+
+		for (int i = 0; i < howManySets; i++)
+		{
+			boardBackup[i] = new Set(*boardSets[i]);
+		}
+
+		backupSetNum = howManySets;
+
+		break;
+	}
 
 	case 1://NOT VALID
-		{
+	{
 
-			//delete[] boardSets;//DELETE OLD SET
-			boardSets=backupSet;//ROLLBACK
-			howManySets = oldsetnum;
-			std::cout << "BOARD SET ARE NOT VALID, INITIATING ROLLBACK!\n";
-			
-			for(int i=0;i<cardCounter;++i)
-			{
-				player->setCard(cardBackup[i]);
-			}
-			
-			for (int i = 0; i < cardCounter; ++i)//delete card
-				delete cardBackup[i];
-			delete[] cardBackup;//DELETE PTR CARDS
-			
-			cardToSet(true, nullptr, 0, player);
+		for (int i = 0; i < howManySets; i++)
+		{
+			delete boardSets[i];
 		}
 
+
+
+		boardSets = boardBackup;//ROLLBACK
+		howManySets = backupSetNum;
+
+		std::cout << "BOARD SET ARE NOT VALID, INITIATING ROLLBACK!\n";
+
+		if (!player->isEmpty()) {
+			cardToSet(true, nullptr, 0, player);//init throw 1 card from players hand
+		}
+
+
+		for (int i = 0; i < cardCounter; ++i)//PUSH CALL CARDS BACK TO PLAYER
+		{
+			player->setCard(cardBackup[i]);
+		}
+
+		delete[] cardBackup;//DELETE PTR CARDS
+		cardBackup = nullptr;
+
 	}
-	
-	
+
+	}
+
+
 }
 
 bool GameEngine::turn(Player* player)
 {
-	Set** backupSet(boardSets); //COPY BACKUP SETS
-	Card**  backupCard = new Card*[14]; //MAX CARDS TO PUT IN SETS
-	//for(int y=0;y<14;++y)
-	//backupCard[y] = new Card;
+	Card** backupCard = new Card * [14];
 	int oldSetNum = howManySets;
-	
-	int backupCardCounter=0;
-
+	int backupCardCounter = 0;
 	Card* tempCardDeck = deck.pop();
-	//trash.push(tempCardDeck);
-	//tempCardDeck = deck.pop();
-	char userOpt='9';
-	
+
+	char userOpt = '9';
+	Card* tmp2 = trash.pop();
 	while (userOpt != '0')
 	{
 		std::cout
@@ -282,9 +280,10 @@ bool GameEngine::turn(Player* player)
 		tempCardDeck->printCard();
 		std::cout
 			<< "]\n"
-			<< "3)Extract a new card from the Trash";
-		trash.printStackForDeBugOnly();
-		
+			<< "3)Extract a new card from the Trash:[";
+		tmp2->printCard();
+		std::cout << "]\nOption:";
+
 
 		std::cin >> userOpt;
 
@@ -292,9 +291,8 @@ bool GameEngine::turn(Player* player)
 		{
 		case '1':
 		{
-
-			
-			tempCardDeck = nullptr; //ASK MAAYAN
+			deck.push(tempCardDeck);
+			tempCardDeck = nullptr;
 			this->userForfeit(player);
 
 			if (howManyPlayers == 1)
@@ -309,79 +307,89 @@ bool GameEngine::turn(Player* player)
 		case '2':
 		{
 			player->setCard(tempCardDeck);
-			tempCardDeck = nullptr;//ASK MAAYAN
+			trash.push(tmp2);
+			tempCardDeck = nullptr;
 			userOpt = '0';
-				break;
+			break;
 		}
 
 		case '3':
 		{
 			deck.push(tempCardDeck);
-			tempCardDeck = nullptr;//ASK MAAYAN
-			player->setCard(trash.pop());
+			tempCardDeck = nullptr;
+			player->setCard(tmp2);
 			userOpt = '0';
-				break;
+			break;
 		}
 		default:
 		{
 			std::cout << "WRONG INPUT - TRY AGAIN!\n";
-				//userOpt='-1';
+			userOpt = '9';
 			break;
 		}
 		}
 
 	}
 
-	userOpt='1';
-	
+	userOpt = '1';
+	fseek(stdin, 0, SEEK_END);
+	std::cin.clear();
+
 	while (userOpt != '0')
 	{
-		std::cout << "what would you like to do?\n1) Create new set\n2)ADD CARD FROM HAND TO EXISTING SET\n3)Allocate between existing sets\n0)End turn\n";
+		if (userOpt == '-') {
+			userOpt = '0';
+		}
+		else
+		{
+			std::cout << "what would you like to do?\n1) Create new set\n2)ADD CARD FROM HAND TO EXISTING SET\n3)Allocate between existing sets\n0)End turn\n";
 
-		printSet(player);
-
-		if (userOpt != '0') {
+			printSet(player);
 			std::cin >> userOpt;
 		}
-		
+
 		switch (userOpt)
 		{
 		case '1'://Create new set
 		{
 			createSet();
-			backupSet = boardSets;
-				break;
+			break;
 		}
 		case '2'://move card from hand to set
 		{
-			if (player->getNumberOfCards() == 1)
-			{
-				std::cout << "Last card, initiating end turn!\n";
-				userOpt = '0';
-				break;
-			}
+
 			cardToSet(false, backupCard, backupCardCounter, player);
 			++backupCardCounter;
-			
+
+			if (player->getNumberOfCards() == 0)
+			{
+				std::cout << "Last card, initiating end turn!\n";
+				userOpt = '-';
+
+			}
+
 			break;
 		}
 		case '3'://move card from set to set
 		{
-			cardToSet(false); 
-				break;
+			cardToSet(false);
+			break;
 		}
 		case '0'://end turn
-		{	
-			endTurn(backupSet, backupCard, backupCardCounter,oldSetNum, player);
+		{
+
+			endTurn(backupCard, backupCardCounter, oldSetNum, player);
+
 			if (isWinner(player))
 				return false;
-			else 
+			else
 				return true;
-			
+
 		}
 		default:
 		{
 			std::cout << "WRONG INPUT - TRY AGAIN!\n";
+
 			break;
 		}
 
@@ -393,9 +401,9 @@ bool GameEngine::turn(Player* player)
 
 void GameEngine::userForfeit(Player* player)
 {
-	int flag=player->getNumberOfCards();
+	int flag = player->getNumberOfCards();
 
-	for(int i =0; i<flag;++i)
+	for (int i = 0; i < flag; ++i)
 	{
 		deck.push(player->extractCard());
 	}
@@ -407,29 +415,32 @@ void GameEngine::userForfeit(Player* player)
 	--howManyPlayers;
 
 	int w = 0;
-	
-	Player** newPlayers = new Player*[howManyPlayers];
 
-	for (int j = 0; j < howManyPlayers+1; ++j)//COPY OLD ARRAY TO NEW ARRAY
+	Player** newPlayers = new Player * [howManyPlayers];
+
+	for (int j = 0; j < howManyPlayers + 1; ++j)//COPY OLD ARRAY TO NEW ARRAY
 	{
 		if (j != playerIndex) {
 			newPlayers[w] = players[j];
 			++w;
 		}
 	}
-	
-	delete[] players; //DELETE OLD ARRAY
-	players=newPlayers; //UPDATING POINTER ARRAY
 
-	
-	
+	delete[] players; //DELETE OLD ARRAY
+	players = newPlayers; //UPDATING POINTER ARRAY
+
+
+
 }
 
 bool GameEngine::isWinner(Player* player) const
 {
 
-	if(player->getNumberOfCards()==0)
+	if (player->getNumberOfCards() == 0)
+	{
+		std::cout << "\nWinner:" << player->getName() << std::endl;
 		return true;
+	}
 	else
 		return false;
 }
@@ -438,22 +449,19 @@ int GameEngine::findPlayer(Player* player) const
 {
 	int i = 0;
 
-	for(;i<howManyPlayers;++i)
+	for (; i < howManyPlayers; ++i)
 	{
-		if(strcmp(players[i]->getName(),player->getName())==0)
+		if (strcmp(players[i]->getName(), player->getName()) == 0)
 		{
 			return i;
 		}
-		
+
 	}
 	return -1;
 }
 
 void GameEngine::startGame()
 {
-	 //CREATE GAME INIT=CARDS,PLAYER,SETS
-	//GameEngine newGame;
-
 	do
 	{
 		std::cout << "Enter The Amount of Players[2 minimum]:\n";
@@ -463,53 +471,51 @@ void GameEngine::startGame()
 			std::cout << "ERROR - MINIMUM PLAYER REQUIERMENTS NOT MET!\n\n";
 		}
 	} while (howManyPlayers < 2);
-	
-	
-	
+
+
+
 	players = new Player * [howManyPlayers];
-	
-	char tmpName[1001]={'\0'};
-	
-	for(int i=0; i< howManyPlayers;++i)//SET PLAYERS NAME
+
+	char tmpName[1001] = { '\0' };
+
+	for (int i = 0; i < howManyPlayers; ++i)//SET PLAYERS NAME
 	{
 		players[i] = new Player;
-		
-		std::cout << "Enter Player ["<<i<<"] Name:\n";
+
+		std::cout << "Enter Player [" << i << "] Name:\n";
 		fseek(stdin, 0, SEEK_END);
 
 		std::cin.clear();
-		std::cin.getline(tmpName,1000);
+		std::cin.getline(tmpName, 1000);
 
 		players[i]->setName(tmpName);
 
-		for(int j=0; j<14;++j)//GIVE PLAYERS 14 CARDS EACH
+		for (int j = 0; j < 14; ++j)//GIVE PLAYERS 14 CARDS EACH
 		{
 			players[i]->setCard(deck.pop());
 
-			
+
 		}
 	}
 
 	trash.push(deck.pop());
-	
-	
+
+
 	bool gameStatus = true;
 	int playersOld = howManyPlayers;
-	while(gameStatus)//RUN UNTIL GAME OVER
+	while (gameStatus)//RUN UNTIL GAME OVER
 	{
 		for (int i = 0; i < howManyPlayers; ++i)//PLAYER TURNS
 		{
 			std::cout << "It's " << players[i]->getName() << " turn!\n";
 			players[i]->printHand();
-			
+
 			gameStatus = this->turn(players[i]);
 
-			
-			
 			if (!gameStatus)
 				break;
 
-			if(howManyPlayers<playersOld)
+			if (howManyPlayers < playersOld)
 			{
 				--i;
 			}
@@ -518,16 +524,14 @@ void GameEngine::startGame()
 
 	std::cout << "GAME OVER\nTHANKS FOR PLAYING.\n";
 
-
-	
 }
 
-void GameEngine::printSet(Player* player)
+void GameEngine::printSet(Player* player) const
 {
 	std::cout << "\nCards:\n";
 	player->printHand();
-	
-	
+
+
 	std::cout << "\nSET:\n";
 	for (int i = 0; i < howManySets; ++i)
 	{
@@ -536,9 +540,3 @@ void GameEngine::printSet(Player* player)
 	}
 	std::cout << "\n---------------------\nOption:";
 }
-
-//void GameEngine::test(GameEngine g)
-//{
-//	this->printSet();
-//	g.printSet();
-//}

@@ -2,9 +2,9 @@
 
 Player::Player() //INIT WHEN NO NAME IS GIVEN
 {
-		name = nullptr;
-		numInHand = 0;
-		hand = nullptr;
+	name = nullptr;
+	numInHand = 0;
+	hand = nullptr;
 }
 
 Player::Player(char* name)//INIT WITH GIVEN NAME
@@ -27,12 +27,12 @@ void Player::setName(char* name) //XXXXXXXX
 		std::cout << "ERROR NO NAME IS GIVEN\nNOTHING TO DO\n";
 		return;
 	}
-	
+
 	delete[] this->name;//END CONDITION - VERIFY THAT NO MEM LEAK WILL HAPPEN
-	
+
 	this->name = new char[strlen(name) + 1]; //ALLOCATED MEM
-	strcpy_s(this->name, strlen(name)+1, name); //COPY NAME //CHECK IF WORKING!!!!!!!
-	
+	strcpy_s(this->name, strlen(name) + 1, name); //COPY NAME //CHECK IF WORKING!!!!!!!
+
 }
 
 void Player::setCard(Card* card) //XX
@@ -45,35 +45,35 @@ void Player::setCard(Card* card) //XX
 
 	++numInHand; //INCREASE CARD SIZE BY 1
 
-	Card** newCards = new Card*[numInHand]; //NEW ARRAY TO COPY
+	Card** newCards = new Card * [numInHand]; //NEW ARRAY TO COPY
 
 	for (int i = 0; i < numInHand - 1; ++i) //copy cards pointers from s to our array
 	{
 		newCards[i] = hand[i];
 	}
 
-	newCards[numInHand-1] = card; //IMPORT POINTER TO LAST ARRAY POSITION - CHECK WARNINGS
+	newCards[numInHand - 1] = card; //IMPORT POINTER TO LAST ARRAY POSITION - CHECK WARNINGS
 	delete[] hand;//EMPTY ORIGINAL ARRAY
-	
+
 	hand = newCards;//SAVE THE NEW ARRAY IN THE ORIGINAL VALUE
 }
 
 Card* Player::extractCard(char char_c, int int_val)
 {
-	if ((char_c == 'C' || char_c == 'H' || char_c == 'D' || char_c == 'S') && (int_val>0 && int_val <14))//IF VALID
+	if ((char_c == 'C' || char_c == 'H' || char_c == 'D' || char_c == 'S') && (int_val > 0 && int_val < 14))//IF VALID
 	{
 		return removeCard(char_c, int_val);//VALUES ARE VALID THUS CONTINUING TO REMOVE
 	}
-	
-	
+
+
 
 	if (char_c == '\0' && int_val == 0)//EMPTY CONDITION
-	{	
+	{
 		return removeCard('R', 0); //R - REMOVE, 0 - FIRST CARD 
 	}
-	
+
 	std::cout << "ERROR INVALID CARD INPUT\nNothing TO DO\n";
-		return nullptr;
+	return nullptr;
 }
 
 
@@ -100,7 +100,7 @@ Card* Player::removeCard(char char_c, int int_val)
 			}
 		}
 	}
-	
+
 	if (cardIndex == -1)//THE CARD WAS NOT FOUND
 	{
 		std::cout << "NO CARD WAS FOUND\n";
@@ -113,7 +113,7 @@ Card* Player::removeCard(char char_c, int int_val)
 	Card** newhand = new Card * [numInHand]; //CREATE A NEW ARRAY IN NEW SIZE
 
 	int w = 0;
-	for (int i = 0; i < numInHand+1; ++i) //COPY CARD POINTERS
+	for (int i = 0; i < numInHand + 1; ++i) //COPY CARD POINTERS
 	{
 		if (i != cardIndex)
 		{
@@ -126,7 +126,7 @@ Card* Player::removeCard(char char_c, int int_val)
 	hand = newhand; //REPLACE OLD DELETED ARRAY WITH NEW ARRAY
 
 	return removedCard; //RETURN TRUE CARD THAT WAS FOUND
-	
+
 }
 
 char* Player::getName() const

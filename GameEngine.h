@@ -6,15 +6,15 @@
 #include "Player.h"
 #include "Set.h"
 
-
-//class Player;
-//class Set;
-
 class GameEngine
 {
 
 private:
 
+	Set** boardBackup;
+	int backupSetNum;
+	
+	
 	Set** boardSets;
 	int howManySets;
 
@@ -36,14 +36,11 @@ public:
 	void initCards();
 	char initSymbol(int num) const;
 
-	void printGame() const;
-
-
 	void createSet();
 	
 	void cardToSet(bool endTurn=false, Card** cardBackup=nullptr,int backupCounter=-1,Player* player=nullptr); //IF PLAYER == NULL, SET TO SET, if PLAYER!=NULL PLAYER HAND TO SET
 	bool isSetNotValid(int i) const;
-	void endTurn(Set** backupSet,Card** cardBackup , int cardCounter,int oldsetnum,Player* player=nullptr);
+	void endTurn(Card** cardBackup , int cardCounter,int oldsetnum,Player* player=nullptr);
 
 	bool turn(Player* player);
 	void userForfeit(Player* player);
@@ -52,9 +49,8 @@ public:
 	int findPlayer(Player* player) const;
 	void startGame();
 
-	void printSet(Player* player);
+	void printSet(Player* player) const;
 
-	//void test(GameEngine g);
 };
 
 
